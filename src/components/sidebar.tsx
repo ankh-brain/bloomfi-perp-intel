@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, TrendingUp, Target, Layers, GitCompare, Flower2, LineChart, Coins, DollarSign, Users, MessageSquare } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, Layers, GitCompare, Flower2, LineChart, Coins, DollarSign, Users, MessageSquare, Receipt } from 'lucide-react';
 
 const nav = [
   { href: '/', label: 'Dashboard', icon: BarChart3 },
   { href: '/volume-trends', label: 'Volume & OI Trends', icon: LineChart },
   { href: '/markets', label: 'Per-Market OI', icon: Layers },
   { href: '/fee-economics', label: 'Fee Economics', icon: DollarSign },
+  { href: '/revenue', label: 'Revenue & P/E', icon: Receipt },
   { href: '/valuations', label: 'Token Valuations', icon: Coins },
   { href: '/market-share', label: 'Market Share', icon: TrendingUp },
   { href: '/competitive', label: 'Competitive Intel', icon: GitCompare },
@@ -45,4 +46,6 @@ export function Sidebar() {
     </aside>
   );
 }
+
+
 
