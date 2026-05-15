@@ -9,62 +9,80 @@ export default async function Dashboard() {
   const top5share = top20.slice(0, 5).reduce((s, p) => s + p.marketShare, 0);
 
   return (
-    <div className="px-6 py-6 lg:px-10 lg:py-8 max-w-[1400px]">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">Perp DEX Market Overview</h1>
-        <p className="text-xs text-zinc-600 mt-1">
-          {market.protocols.length} protocols &middot; Live via DefiLlama &middot; {new Date(market.lastUpdated).toLocaleTimeString()}
-        </p>
-      </div>
+    <>
+      <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fafafa', letterSpacing: '-0.02em' }}>
+        Perp DEX Market Overview
+      </h1>
+      <p style={{ fontSize: 12, color: '#52525b', marginTop: 4, marginBottom: 24 }}>
+        {market.protocols.length} protocols &middot; Live via DefiLlama &middot; Updated {new Date(market.lastUpdated).toLocaleTimeString()}
+      </p>
 
-      {/* KPI Row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-        <KPI label="Total Open Interest" value={formatUSD(market.totalOI)} delta={`${market.protocols.length} protocols`} />
-        <KPI label="Fees (24h)" value={formatUSD(market.totalFees24h)} delta={`30d: ${formatUSD(market.totalFees30d)}`} />
-        <KPI label="Hyperliquid Share" value={`${top20[0]?.marketShare.toFixed(1)}%`} delta={`OI: ${formatUSD(top20[0]?.openInterest || 0)}`} accent />
-        <KPI label="Top 5 Concentration" value={`${top5share.toFixed(1)}%`} delta="of total open interest" />
-      </div>
-
-      {/* Table */}
-      <div className="rounded-lg border border-zinc-800/60 overflow-hidden bg-zinc-950/50 mb-6">
-        <div className="px-4 py-3 border-b border-zinc-800/40 flex items-center justify-between">
-          <span className="text-xs font-medium text-zinc-300">Protocol Rankings</span>
-          <span className="text-[9px] text-zinc-600 uppercase tracking-widest">by open interest</span>
+      {/* KPIs */}
+      <div className="grid-4" style={{ marginBottom: 24 }}>
+        <div className="kpi-card">
+          <div className="kpi-label">Total Open Interest</div>
+          <div className="kpi-value">{formatUSD(market.totalOI)}</div>
+          <div className="kpi-sub">{market.protocols.length} protocols</div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="kpi-card">
+          <div className="kpi-label">Fees (24h)</div>
+          <div className="kpi-value">{formatUSD(market.totalFees24h)}</div>
+          <div className="kpi-sub">30d: {formatUSD(market.totalFees30d)}</div>
+        </div>
+        <div className="kpi-card accent">
+          <div className="kpi-label">Hyperliquid Share</div>
+          <div className="kpi-value accent">{top20[0]?.marketShare.toFixed(1)}%</div>
+          <div className="kpi-sub">OI: {formatUSD(top20[0]?.openInterest || 0)}</div>
+        </div>
+        <div className="kpi-card">
+          <div className="kpi-label">Top 5 Concentration</div>
+          <div className="kpi-value">{top5share.toFixed(1)}%</div>
+          <div className="kpi-sub">of total open interest</div>
+        </div>
+      </div>
+
+      {/* Rankings Table */}
+      <div className="data-table-wrap" style={{ marginBottom: 24 }}>
+        <div className="data-table-header">
+          <span style={{ fontSize: 13, fontWeight: 600, color: '#e4e4e7' }}>Protocol Rankings</span>
+          <span style={{ fontSize: 9, color: '#3f3f46', textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>by open interest</span>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="data-table">
             <thead>
-              <tr className="border-b border-zinc-800/40">
-                {['#','Protocol','Open Interest','Share','Fees 24h','Fees 30d','24h','Chain'].map(h => (
-                  <th key={h} className={`px-4 py-2.5 text-[10px] font-medium text-zinc-600 uppercase tracking-wider ${h === '#' ? 'text-left w-10' : h === 'Protocol' || h === 'Chain' ? 'text-left' : 'text-right'}`}>{h}</th>
-                ))}
+              <tr>
+                <th style={{ width: 40 }}>#</th>
+                <th>Protocol</th>
+                <th className="right">Open Interest</th>
+                <th className="right">Share</th>
+                <th className="right">Fees 24h</th>
+                <th className="right">Fees 30d</th>
+                <th className="right">24h</th>
+                <th>Chain</th>
               </tr>
             </thead>
-            <tbody className="text-[13px]">
+            <tbody>
               {top20.map((p, i) => (
-                <tr key={p.name} className="border-b border-zinc-800/20 hover:bg-zinc-800/10 transition-colors">
-                  <td className="px-4 py-2.5 text-zinc-600 text-xs">{i + 1}</td>
-                  <td className="px-4 py-2.5 text-zinc-200 font-medium whitespace-nowrap">{p.name.replace(' Perps','').replace(' Perpetual Exchange','')}</td>
-                  <td className="px-4 py-2.5 text-right font-mono text-zinc-200">{formatUSD(p.openInterest)}</td>
-                  <td className="px-4 py-2.5 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <div className="w-14 h-1 bg-zinc-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-violet-500/70 rounded-full" style={{ width: `${Math.min(p.marketShare, 100)}%` }} />
-                      </div>
-                      <span className="text-xs text-zinc-500 font-mono w-10 text-right">{p.marketShare.toFixed(1)}%</span>
-                    </div>
+                <tr key={p.name}>
+                  <td className="dim">{i + 1}</td>
+                  <td className="bright">{p.name.replace(' Perps','').replace(' Perpetual Exchange','')}</td>
+                  <td className="right mono bright">{formatUSD(p.openInterest)}</td>
+                  <td className="right">
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                      <span className="share-bar">
+                        <div className="share-fill" style={{ width: `${Math.min(p.marketShare, 100)}%` }} />
+                      </span>
+                      <span className="mono dim">{p.marketShare.toFixed(1)}%</span>
+                    </span>
                   </td>
-                  <td className="px-4 py-2.5 text-right font-mono text-zinc-400 text-xs">{p.fees24h > 0 ? formatUSD(p.fees24h, 2) : <span className="text-zinc-700">-</span>}</td>
-                  <td className="px-4 py-2.5 text-right font-mono text-zinc-400 text-xs">{p.fees30d > 0 ? formatUSD(p.fees30d) : <span className="text-zinc-700">-</span>}</td>
-                  <td className="px-4 py-2.5 text-right">
-                    <span className={`text-xs font-mono ${p.change1d > 0 ? 'text-emerald-500' : p.change1d < 0 ? 'text-red-400' : 'text-zinc-600'}`}>
+                  <td className="right mono dim">{p.fees24h > 0 ? formatUSD(p.fees24h, 2) : <span className="muted">-</span>}</td>
+                  <td className="right mono dim">{p.fees30d > 0 ? formatUSD(p.fees30d) : <span className="muted">-</span>}</td>
+                  <td className="right">
+                    <span className={`mono ${p.change1d > 0 ? 'positive' : p.change1d < 0 ? 'negative' : 'muted'}`} style={{ fontSize: 12 }}>
                       {p.change1d !== 0 ? formatPct(p.change1d) : '-'}
                     </span>
                   </td>
-                  <td className="px-4 py-2.5">
-                    <span className="text-[10px] text-zinc-600">{p.chains[0] || '-'}</span>
-                  </td>
+                  <td className="dim">{p.chains[0] || '-'}</td>
                 </tr>
               ))}
             </tbody>
@@ -74,17 +92,7 @@ export default async function Dashboard() {
 
       {/* Charts */}
       <DashboardCharts protocols={top20} />
-    </div>
-  );
-}
-
-function KPI({ label, value, delta, accent }: { label: string; value: string; delta: string; accent?: boolean }) {
-  return (
-    <div className={`rounded-lg px-4 py-3.5 border ${accent ? 'bg-violet-600/[0.04] border-violet-600/15' : 'bg-zinc-950/50 border-zinc-800/50'}`}>
-      <div className="text-[10px] font-medium text-zinc-600 uppercase tracking-wider">{label}</div>
-      <div className={`text-xl font-semibold mt-1 tracking-tight ${accent ? 'text-violet-400' : 'text-zinc-100'}`}>{value}</div>
-      <div className="text-[11px] text-zinc-600 mt-0.5">{delta}</div>
-    </div>
+    </>
   );
 }
 

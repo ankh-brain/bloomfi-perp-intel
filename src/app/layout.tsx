@@ -10,18 +10,14 @@ export const metadata: Metadata = {
   description: "Deep analytics on the perpetual DEX landscape.",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-[#09090b] text-zinc-300 min-h-screen antialiased`}>
+    <html lang="en">
+      <body className={inter.className}>
         <Sidebar />
-        <main className="lg:pl-56 min-h-screen">
+        <div className="main-content">
           {children}
-        </main>
+        </div>
       </body>
     </html>
   );
