@@ -2,14 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, ArrowLeftRight } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, ArrowLeftRight, LineChart, BookOpen, Coins, DollarSign } from 'lucide-react';
 
 const nav = [
   { href: '/', label: 'Dashboard', icon: BarChart3 },
-  { href: '/market-share', label: 'Market Share', icon: TrendingUp },
-  { href: '/open-interest', label: 'Open Interest', icon: Layers },
-  { href: '/fees', label: 'Fees & Revenue', icon: Activity },
+  { href: '/volume-trends', label: 'Volume & OI Trends', icon: LineChart },
+  { href: '/markets', label: 'Per-Market OI', icon: Layers },
+  { href: '/depth', label: 'Order Book Depth', icon: BookOpen },
   { href: '/funding', label: 'Funding Rates', icon: ArrowLeftRight },
+  { href: '/fee-economics', label: 'Fee Economics', icon: DollarSign },
+  { href: '/valuations', label: 'Token Valuations', icon: Coins },
+  { href: '/market-share', label: 'Market Share', icon: TrendingUp },
   { href: '/competitive', label: 'Competitive Intel', icon: GitCompare },
   { href: '/opportunity', label: 'Opportunity Map', icon: Target },
 ];
@@ -36,12 +39,10 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="sb-footer">
-        Data via DefiLlama<br/>Auto-refresh 5 min<br/><span>Ankh Labs</span>
+        Data: DefiLlama, Hyperliquid, dYdX, CoinGecko<br/>
+        Auto-refresh 1-5 min<br/><span>Ankh Labs</span>
       </div>
     </aside>
   );
 }
-
-
-
 
