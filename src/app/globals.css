@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --purple: #7C3AED;
+  --purple-light: #A855F7;
+}
+
+body {
+  background: #08080d;
+  color: #d4d4dc;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0f0f16; }
+::-webkit-scrollbar-thumb { background: #1a1a28; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #252535; }
+
+/* Recharts overrides */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #1a1a28 !important;
+}
+.recharts-text { fill: #6b6b7b !important; font-size: 11px !important; }
+
