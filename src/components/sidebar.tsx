@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, ArrowLeftRight, LineChart, BookOpen, Coins, DollarSign } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, ArrowLeftRight, LineChart, BookOpen, Coins, DollarSign, Users } from 'lucide-react';
 
 const nav = [
   { href: '/', label: 'Dashboard', icon: BarChart3 },
@@ -15,6 +15,7 @@ const nav = [
   { href: '/market-share', label: 'Market Share', icon: TrendingUp },
   { href: '/competitive', label: 'Competitive Intel', icon: GitCompare },
   { href: '/opportunity', label: 'Opportunity Map', icon: Target },
+  { href: '/on-chain', label: 'On-Chain Data', icon: Users },
 ];
 
 export function Sidebar() {
@@ -45,4 +46,6 @@ export function Sidebar() {
     </aside>
   );
 }
+
+
 
