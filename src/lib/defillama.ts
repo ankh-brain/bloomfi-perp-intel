@@ -132,6 +132,23 @@ export async function fetchMarketOverview(): Promise<MarketOverview> {
     })
     .sort((a, b) => b.openInterest - a.openInterest);
 
+  // Merge tradeXYZ into Hyperliquid (tradeXYZ is a frontend on Hyperliquid L1)
+  const hyperIdx = protocols.findIndex(p => p.name.toLowerCase().includes('hyperliquid'));
+  const tradeIdx = protocols.findIndex(p => p.name.toLowerCase() === 'tradexyz');
+  if (hyperIdx >= 0 && tradeIdx >= 0) {
+    protocols[hyperIdx].openInterest += protocols[tradeIdx].openInterest;
+    protocols[hyperIdx].fees24h += protocols[tradeIdx].fees24h;
+    protocols[hyperIdx].fees30d += protocols[tradeIdx].fees30d;
+    protocols[hyperIdx].volume24h += protocols[tradeIdx].volume24h;
+    protocols[hyperIdx].volume30d += protocols[tradeIdx].volume30d;
+    protocols[hyperIdx].name = 'Hyperliquid (incl. tradeXYZ)';
+    protocols.splice(tradeIdx, 1);
+    // Recalculate market shares
+    const newTotal = protocols.reduce((s, p) => s + p.openInterest, 0);
+    protocols.forEach(p => p.marketShare = newTotal > 0 ? (p.openInterest / newTotal) * 100 : 0);
+    protocols.sort((a, b) => b.openInterest - a.openInterest);
+  }
+
   const totalFees24h = protocols.reduce((s, p) => s + p.fees24h, 0);
   const totalFees30d = protocols.reduce((s, p) => s + p.fees30d, 0);
   const totalVolume24h = protocols.reduce((s, p) => s + p.volume24h, 0);
@@ -187,4 +204,5 @@ export function formatPct(value: number): string {
   const sign = value >= 0 ? '+' : '';
   return `${sign}${value.toFixed(1)}%`;
 }
+
 

@@ -1,4 +1,4 @@
-import { fetchDexTokens } from '@/lib/extended';
+import { fetchDexTokens, STAKING_INFO } from '@/lib/extended';
 import { formatUSD } from '@/lib/defillama';
 
 export const revalidate = 300;
@@ -9,12 +9,12 @@ export default async function ValuationsPage() {
   return (
     <>
       <h1 className="page-title">DEX Token Valuations</h1>
-      <p className="page-sub">Market cap, FDV, and P/E metrics for perp DEX tokens</p>
+      <p className="page-sub">Market cap, FDV, staking economics, and performance for perp DEX tokens</p>
 
-      <div className="card">
+      <div className="card" style={{ marginBottom: 20 }}>
         <div className="card-head">
           <span className="card-title">Token Comparison</span>
-          <span className="card-badge">via CoinGecko</span>
+          <span className="card-badge">via CoinGecko + manual staking data</span>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table className="tbl">
@@ -25,10 +25,8 @@ export default async function ValuationsPage() {
                 <th className="r">Market Cap</th>
                 <th className="r">FDV</th>
                 <th className="r">Mcap/FDV</th>
-                <th className="r">Volume 24h</th>
                 <th className="r">24h</th>
                 <th className="r">7d</th>
-                <th className="r">ATH</th>
                 <th className="r">From ATH</th>
               </tr>
             </thead>
@@ -50,7 +48,6 @@ export default async function ValuationsPage() {
                         {mcapFdv.toFixed(0)}%
                       </span>
                     </td>
-                    <td className="r mono dim">{formatUSD(t.volume24h)}</td>
                     <td className="r mono">
                       <span className={t.change24h >= 0 ? 'pos' : 'neg'}>
                         {t.change24h >= 0 ? '+' : ''}{t.change24h.toFixed(1)}%
@@ -61,7 +58,6 @@ export default async function ValuationsPage() {
                         {t.change7d >= 0 ? '+' : ''}{t.change7d.toFixed(1)}%
                       </span>
                     </td>
-                    <td className="r mono dim">${t.ath < 1 ? t.ath.toFixed(4) : t.ath.toFixed(2)}</td>
                     <td className="r mono neg">{fromAth.toFixed(0)}%</td>
                   </tr>
                 );
@@ -71,14 +67,51 @@ export default async function ValuationsPage() {
         </div>
       </div>
 
-      <div className="card" style={{ marginTop: 16, padding: 20 }}>
-        <div className="card-title" style={{ marginBottom: 8 }}>What This Tells BloomFi</div>
+      {/* Staking Economics */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div className="card-head">
+          <span className="card-title">Staking Economics</span>
+          <span className="card-badge">staking APY, benefits, and participation</span>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table className="tbl">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th className="r">Staking APY</th>
+                <th className="r">% Staked</th>
+                <th>Staking Benefits</th>
+                <th className="r">Price</th>
+                <th className="r">Market Cap</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(STAKING_INFO).map(([symbol, info]) => {
+                const token = tokens.find(t => t.symbol === symbol);
+                return (
+                  <tr key={symbol}>
+                    <td className="bright">{symbol}</td>
+                    <td className="r mono pos">{info.stakingAPY}</td>
+                    <td className="r mono num">{info.stakedPct}</td>
+                    <td className="dim" style={{ fontSize: 12, maxWidth: 300, whiteSpace: 'normal' as const }}>{info.stakingBenefit}</td>
+                    <td className="r mono dim">{token ? `$${token.price < 1 ? token.price.toFixed(4) : token.price.toFixed(2)}` : '-'}</td>
+                    <td className="r mono dim">{token ? formatUSD(token.mcap) : '-'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="card" style={{ padding: 20 }}>
+        <div className="card-title" style={{ marginBottom: 8 }}>BloomFi Staking Strategy Implications</div>
         <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.8 }}>
-          <strong style={{ color: '#e5e7eb' }}>Mcap/FDV Ratio</strong> = how much of the token supply is circulating. Low ratio = lots of unlocks ahead (sell pressure risk).<br/>
-          <strong style={{ color: '#e5e7eb' }}>From ATH</strong> = how far below all-time high. Deep discounts in competitors = market questioning their models.<br/>
-          <strong style={{ color: '#a78bfa' }}>BloomFi insight:</strong> HYPE trades at ${tokens.find(t => t.symbol === 'HYPE')?.mcap ? formatUSD(tokens.find(t => t.symbol === 'HYPE')!.mcap) : '?'} mcap — 
-          proving perp DEX tokens can command massive valuations. But most others (DYDX, GMX) are down 80%+ from ATH. 
-          The market rewards dominance and penalizes everything else. BloomFi&apos;s TGE timing and positioning must account for this.
+          <strong style={{ color: '#e5e7eb' }}>GMX model (80% staked)</strong> = highest staking participation because stakers get 30% of all platform fees. Creates strong token sink.<br/>
+          <strong style={{ color: '#e5e7eb' }}>SNX model (60% staked)</strong> = staking is required to mint synthetic assets. Creates forced demand for the token.<br/>
+          <strong style={{ color: '#e5e7eb' }}>HYPE model (30% staked)</strong> = lower staking but massive market cap. Dominated by community belief, not staking utility.<br/>
+          <strong style={{ color: '#e5e7eb' }}>Fee discount model</strong> (DRIFT, VERTEX, APEX) = staking gives trading fee discounts. Lower participation but clearer utility.<br/><br/>
+          <strong style={{ color: '#a78bfa' }}>BloomFi BLOSM consideration:</strong> With 70% of fees going to depositors, BLOSM staking could unlock additional yield boosts or governance rights over fee parameters. The key question: does staking the token give you a higher share of the 70%, or additional protocol revenue from the 30%?
         </div>
       </div>
     </>

@@ -2,14 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, ArrowLeftRight, LineChart, BookOpen, Coins, DollarSign, Users, MessageSquare } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, Layers, GitCompare, Flower2, LineChart, Coins, DollarSign, Users, MessageSquare } from 'lucide-react';
 
 const nav = [
   { href: '/', label: 'Dashboard', icon: BarChart3 },
   { href: '/volume-trends', label: 'Volume & OI Trends', icon: LineChart },
   { href: '/markets', label: 'Per-Market OI', icon: Layers },
-  { href: '/depth', label: 'Order Book Depth', icon: BookOpen },
-  { href: '/funding', label: 'Funding Rates', icon: ArrowLeftRight },
   { href: '/fee-economics', label: 'Fee Economics', icon: DollarSign },
   { href: '/valuations', label: 'Token Valuations', icon: Coins },
   { href: '/market-share', label: 'Market Share', icon: TrendingUp },
@@ -41,14 +39,10 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="sb-footer">
-        Data: DefiLlama, Hyperliquid, dYdX, CoinGecko<br/>
+        Data: DefiLlama, Hyperliquid, dYdX, CoinGecko, Dune<br/>
         Auto-refresh 1-5 min<br/><span>Ankh Labs</span>
       </div>
     </aside>
   );
 }
-
-
-
-
 

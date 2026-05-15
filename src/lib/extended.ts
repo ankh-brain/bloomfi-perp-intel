@@ -47,6 +47,7 @@ const DEX_TOKEN_IDS = [
   'hyperliquid', 'dydx-chain', 'gmx', 'jupiter-exchange-solana',
   'drift-protocol', 'vertex-protocol', 'aevo-exchange',
   'kwenta', 'bluefin-2', 'orderly-network',
+  'havven', 'apex-token-2', 'myx-finance',
 ];
 
 export async function fetchDexTokens(): Promise<TokenData[]> {
@@ -186,3 +187,21 @@ export async function fetchHyperliquidStats(): Promise<{totalVolume: number; dai
   };
 }
 
+
+
+
+// Staking info (manually maintained)
+export const STAKING_INFO: Record<string, { stakingAPY: string; stakingBenefit: string; stakedPct: string }> = {
+  HYPE: { stakingAPY: '~2.5%', stakingBenefit: 'Validator rewards, governance', stakedPct: '~30%' },
+  DYDX: { stakingAPY: '~15%', stakingBenefit: 'Governance, safety module', stakedPct: '~22%' },
+  GMX: { stakingAPY: '~5-8%', stakingBenefit: 'Fee sharing (30% of fees), esGMX rewards', stakedPct: '~80%' },
+  JUP: { stakingAPY: '~4%', stakingBenefit: 'Governance, launchpad access', stakedPct: '~35%' },
+  SNX: { stakingAPY: '~8-12%', stakingBenefit: 'Fee sharing, inflation rewards, required for minting', stakedPct: '~60%' },
+  DRIFT: { stakingAPY: '~6%', stakingBenefit: 'Fee discounts, governance', stakedPct: '~25%' },
+  VERTEX: { stakingAPY: '~5%', stakingBenefit: 'Fee discounts, vesting acceleration', stakedPct: '~40%' },
+  APEX: { stakingAPY: '~10%', stakingBenefit: 'Fee discounts, governance, buyback', stakedPct: '~45%' },
+  AEVO: { stakingAPY: '~3%', stakingBenefit: 'Fee discounts', stakedPct: '~15%' },
+  KWENTA: { stakingAPY: '~12%', stakingBenefit: 'Fee sharing, inflation rewards', stakedPct: '~55%' },
+  MYX: { stakingAPY: '~8%', stakingBenefit: 'Fee discounts, governance', stakedPct: '~30%' },
+  ORDER: { stakingAPY: '~5%', stakingBenefit: 'Fee discounts', stakedPct: '~20%' },
+};
