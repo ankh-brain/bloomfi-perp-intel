@@ -6,13 +6,11 @@ export const revalidate = 300;
 export default async function MarketSharePage() {
   const market = await fetchMarketOverview();
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Market Share & Volume</h1>
-        <p className="text-sm text-gray-500 mt-1">Who dominates and where the shifts are happening</p>
-      </div>
+    <>
+      <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fafafa' }}>Market Share & Volume</h1>
+      <p style={{ fontSize: 12, color: '#52525b', marginTop: 4, marginBottom: 24 }}>Who dominates and where the shifts are</p>
       <MarketShareCharts protocols={market.protocols} />
-    </div>
+    </>
   );
 }
 
