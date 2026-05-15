@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "BloomFi Perp Intel | Market Intelligence Dashboard",
-  description: "Deep analytics on the perpetual DEX landscape. Market share, volumes, fees, open interest, and competitive intelligence.",
+  description: "Deep analytics on the perpetual DEX landscape.",
 };
 
 export default function RootLayout({
@@ -17,13 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-[#08080d] text-gray-200 min-h-screen`}>
-        <div className="flex">
-          <Sidebar />
-          <main className="flex-1 ml-60 min-h-screen">
-            {children}
-          </main>
-        </div>
+      <body className={`${inter.className} bg-[#09090b] text-zinc-300 min-h-screen antialiased`}>
+        <Sidebar />
+        <main className="lg:pl-56 min-h-screen">
+          {children}
+        </main>
       </body>
     </html>
   );

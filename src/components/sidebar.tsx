@@ -2,68 +2,81 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2 } from 'lucide-react';
+import { BarChart3, TrendingUp, Target, Layers, Activity, GitCompare, Flower2, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 const nav = [
-  { href: '/', label: 'Dashboard', icon: BarChart3, desc: 'Market overview' },
-  { href: '/market-share', label: 'Market Share', icon: TrendingUp, desc: 'Volume & dominance' },
-  { href: '/open-interest', label: 'Open Interest', icon: Layers, desc: 'OI trends & breakdown' },
-  { href: '/fees', label: 'Fees & Revenue', icon: Activity, desc: 'Protocol economics' },
-  { href: '/competitive', label: 'Competitive Intel', icon: GitCompare, desc: 'Head-to-head comparison' },
-  { href: '/opportunity', label: 'BloomFi Opportunity', icon: Target, desc: 'Gap analysis & strategy' },
+  { href: '/', label: 'Dashboard', icon: BarChart3 },
+  { href: '/market-share', label: 'Market Share', icon: TrendingUp },
+  { href: '/open-interest', label: 'Open Interest', icon: Layers },
+  { href: '/fees', label: 'Fees & Revenue', icon: Activity },
+  { href: '/competitive', label: 'Competitive Intel', icon: GitCompare },
+  { href: '/opportunity', label: 'Opportunity Map', icon: Target },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-60 bg-[#0a0a12] border-r border-[#1a1a28] flex flex-col z-50">
-      {/* Logo */}
-      <div className="p-5 border-b border-[#1a1a28]">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center">
-            <Flower2 size={16} className="text-white" />
-          </div>
-          <div>
-            <div className="text-sm font-bold text-white tracking-tight">BloomFi Intel</div>
-            <div className="text-[10px] text-gray-500 uppercase tracking-wider">Perp DEX Analytics</div>
+    <>
+      {/* Mobile toggle */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="lg:hidden fixed top-4 left-4 z-[60] p-2 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-400"
+      >
+        {open ? <X size={18} /> : <Menu size={18} />}
+      </button>
+
+      {/* Overlay */}
+      {open && (
+        <div className="lg:hidden fixed inset-0 bg-black/60 z-40" onClick={() => setOpen(false)} />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed top-0 bottom-0 w-56 bg-zinc-950 border-r border-zinc-800/50 flex flex-col z-50 transition-transform lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="px-4 py-5 border-b border-zinc-800/50">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-violet-600 to-violet-500 flex items-center justify-center flex-shrink-0">
+              <Flower2 size={14} className="text-white" />
+            </div>
+            <div>
+              <div className="text-[13px] font-semibold text-zinc-100 tracking-tight leading-tight">BloomFi Intel</div>
+              <div className="text-[9px] text-zinc-600 uppercase tracking-[0.15em] leading-tight">Perp DEX Analytics</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 py-3 px-3 space-y-1">
-        {nav.map(({ href, label, icon: Icon, desc }) => {
-          const active = pathname === href;
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
-                active
-                  ? 'bg-purple-600/10 text-purple-400 border border-purple-600/20'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.03]'
-              }`}
-            >
-              <Icon size={16} className={active ? 'text-purple-400' : 'text-gray-500'} />
-              <div>
-                <div className="font-medium">{label}</div>
-                <div className={`text-[10px] ${active ? 'text-purple-400/60' : 'text-gray-600'}`}>{desc}</div>
-              </div>
-            </Link>
-          );
-        })}
-      </nav>
+        <nav className="flex-1 py-2 px-2">
+          {nav.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] transition-all my-0.5 ${
+                  active
+                    ? 'bg-violet-600/10 text-violet-400'
+                    : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/40'
+                }`}
+              >
+                <Icon size={15} className={active ? 'text-violet-400' : 'text-zinc-600'} />
+                <span className="font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-[#1a1a28]">
-        <div className="text-[10px] text-gray-600 leading-relaxed">
-          Data: DefiLlama (free API)<br/>
-          Refreshes every 5 min<br/>
-          Built by <span className="text-purple-400/60">Ankh Labs</span>
+        <div className="px-4 py-3 border-t border-zinc-800/50">
+          <div className="text-[10px] text-zinc-700 leading-relaxed">
+            Data via DefiLlama<br/>
+            Auto-refresh 5 min<br/>
+            <span className="text-violet-600/60">Ankh Labs</span>
+          </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
 
